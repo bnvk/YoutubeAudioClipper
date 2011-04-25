@@ -1,42 +1,59 @@
 import array
 import wave
 
-chunk_len = 440
-chunk_secs = .01
-threshhold = 10
+def getClipLen(file_path):
+	chunk_len = 44
+	chunk_secs = .001
+	threshhold = .02
 
-fd = wave.open('audiodump.wav')
+	fd = wave.open(file_path)
 
-chunk_sz = fd.getnchannels() * fd.getsampwidth() * chunk_len
+	chunk_sz = fd.getnchannels() * fd.getsampwidth() * chunk_len
 
-chunk = fd.readframes(chunk_len)
-
-chunk_avgs = []
-while len(chunk) == chunk_sz:
-	decoded = array.array('H', chunk)
-	chunk_accum = 0
-	# Sump up the frames
-	for frame_ndx in range(chunk_len):
-		# Sum up the channels
-		channel_accum = 0
-		for channel_i in range(fd.getnchannels()):
-			channel_accum = channel_accum + decoded[frame_ndx+channel_i]
-		chunk_accum = chunk_accum + channel_accum
-	chunk_avgs.append(chunk_accum / (chunk_len * fd.getnchannels()))
 	chunk = fd.readframes(chunk_len)
 
-lead_time = 0.0
-tail_time = 0.0
-for i in range(len(chunk_avgs)):
-	if chunk_avgs[i] > threshhold:
-		break
-	lead_time += chunk_secs
+	# load average chunk vals
+	chunk_avgs = []
+	while len(chunk) == chunk_sz:
+		decoded = array.array('H', chunk)
+		chunk_accum = 0
+		# Sump up the frames
+		for frame_ndx in range(chunk_len):
+			# Sum up the channels
+			channel_accum = 0
+			for channel_i in range(fd.getnchannels()):
+				channel_accum = channel_accum + decoded[frame_ndx+channel_i]
+			chunk_accum = chunk_accum + channel_accum
+		chunk_avgs.append(chunk_accum / (chunk_len * fd.getnchannels()))
+		chunk = fd.readframes(chunk_len)
 
-for i in range(len(chunk_avgs)-1, -1, -1):
-	if chunk_avgs[i] > threshhold:
-		break
-	tail_time += chunk_secs
+	# determine threshold
+	chunk_accum = 0
+	for chunk in chunk_avgs:
+		chunk_accum += chunk
 
-print 'Lead time: %s seconds' % lead_time
-print 'Tail time: %s seconds' % tail_time
+	thresh_sum = chunk_accum * threshhold
+
+	lead_time = 0.0
+	tail_time = 0.0
+
+	accum = 0
+	for i in range(len(chunk_avgs)):
+		accum += chunk_avgs[i]
+		if accum >= thresh_sum:
+			break
+		lead_time += chunk_secs
+
+	accum = 0
+	for i in range(len(chunk_avgs)-1, -1, -1):
+		accum += chunk_avgs[i]
+		if accum >= thresh_sum:
+			break
+		tail_time += chunk_secs
+
+	print chunk_avgs
+	return lead_time, tail_time
+
+if __name__ == '__main__':
+	print getClipLen('audiodump.wav')
 
