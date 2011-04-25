@@ -1,0 +1,6 @@
+You must have mplayer installed to use this
+
+To run:
+
+example - ./clipvid.sh "http://www.youtube.com/watch?v=pBTNo2YG9RU"
+
