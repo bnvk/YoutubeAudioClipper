@@ -1,10 +1,11 @@
+import sys
 import array
 import wave
 
 def getClipLen(file_path):
 	chunk_len = 44
 	chunk_secs = .001
-	threshhold = .02
+	threshhold = .015
 
 	fd = wave.open(file_path)
 
@@ -34,6 +35,7 @@ def getClipLen(file_path):
 
 	thresh_sum = chunk_accum * threshhold
 
+	# Find endpoints
 	lead_time = 0.0
 	tail_time = 0.0
 
@@ -51,9 +53,8 @@ def getClipLen(file_path):
 			break
 		tail_time += chunk_secs
 
-	print chunk_avgs
 	return lead_time, tail_time
 
 if __name__ == '__main__':
-	print getClipLen('audiodump.wav')
+	print getClipLen(sys.argv[1])
 
