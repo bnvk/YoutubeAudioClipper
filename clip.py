@@ -2,13 +2,13 @@ import sys
 import array
 import wave
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 def getClipLen(file_path):
 	chunk_len = 4410
 	chunk_secs = .1
 	hist_n_intervals = 100
-	threshhold = .3
+	threshhold = .4
 
 	fd = wave.open(file_path)
 
@@ -78,8 +78,13 @@ def getClipLen(file_path):
 			break
 		lead_time += chunk_secs
 
-	plt.plot(times, chunk_avgs)
-	plt.show()
+	for chunk in reversed(chunk_avgs):
+		if chunk >= chunk_thresh:
+			break
+		tail_time += chunk_secs
+
+#	plt.plot(times, chunk_avgs)
+#	plt.show()
 
 	return lead_time, tail_time
 
