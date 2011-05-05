@@ -87,7 +87,8 @@ def getClipLen(file_path):
 #	plt.show()
 
 	return {'lead_time': lead_time,
-		'tail_time': tail_time}
+		'tail_time': tail_time,
+		'total_time': float(fd.getnframes()) / (fd.getnchannels() * 44100) }
 
 if __name__ == '__main__':
 	print getClipLen(sys.argv[1])

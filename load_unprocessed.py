@@ -3,6 +3,7 @@ import json
 import subprocess
 
 unprocessed_dir = 'UnprocessedVideos'
+processed_dir = 'Videos'
 
 def loadUnprocessed():
 	unprocesed_url = 'http://rafachant.reverseproductions.com/api/content/view/module/rafachant'
