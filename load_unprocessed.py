@@ -6,7 +6,7 @@ unprocessed_dir = 'UnprocessedVideos'
 processed_dir = 'Videos'
 
 def loadUnprocessed():
-	unprocesed_url = 'http://rafachant.reverseproductions.com/api/content/view/module/rafachant'
+	unprocesed_url = 'http://rafachant.reverseproductions.com/api/rafachant/unprocessed'
 
 	f = urllib2.urlopen(unprocesed_url)
 	resp = json.loads(f.read())
