@@ -11,6 +11,7 @@ def getClipLen(file_path):
 	threshhold = .4
 
 	fd = wave.open(file_path)
+	total_time = fd.getnframes()*fd.getsampwidth() / float(fd.getnchannels() * fd.getframerate())
 
 	chunk_sz = fd.getnchannels() * fd.getsampwidth() * chunk_len
 	chunk = fd.readframes(chunk_len)
@@ -88,7 +89,7 @@ def getClipLen(file_path):
 
 	return {'lead_time': lead_time,
 		'tail_time': tail_time,
-		'total_time': float(fd.getnframes()) / (fd.getnchannels() * 44100) }
+		'total_time': total_time }
 
 if __name__ == '__main__':
 	print getClipLen(sys.argv[1])

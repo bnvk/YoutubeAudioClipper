@@ -20,7 +20,7 @@ def dump_audio(clip_path, dest_path):
 	return True
 
 if __name__=='__main__':
-	#load_unprocessed.loadUnprocessed()
+	load_unprocessed.loadUnprocessed()
 	unprocessed_list = os.listdir(load_unprocessed.unprocessed_dir)
 	for clip_path in unprocessed_list:
 		dst_path = 'UnprocessedAudio/' + clip_path.split('.')[0] + '.wav'
