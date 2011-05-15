@@ -8,8 +8,7 @@ import urllib2
 import clip
 import settings
 
-post_url = 'http://rafachant.reverseproductions.com/api/rafachant/process_audio/id/'
-
+post_url = settings.success_url
 def dump_audio(clip_path, dest_path):
 	if subprocess.check_call(['mplayer', '-vc', 'dummy', '-vo', 'null', '-ao', 'pcm', clip_path]) != 0:
 		print 'Error dumping audio for %s' % clip_path
@@ -43,8 +42,6 @@ if __name__=='__main__':
 		processed.append(v)
 
 	for clip_data in processed:
-		print clip_data
-		continue
 		post_data = {}
 		post_data['audio_process_data'] = json.dumps(clip_data)
 		post_data['the_magic_word'] = 'I luvs my #s'
