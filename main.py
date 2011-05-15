@@ -39,7 +39,7 @@ if __name__=='__main__':
 	for clip_path in unprocessed_list:
 		try:
 			v = clip.getClipLen('UnprocessedAudio/' + clip_path)
-		except Error e:
+		except Error, e:
 			print 'Skipping bad clip'
 			continue
 		v['clip_id'] = clip_path.split('.')[0]
