@@ -12,7 +12,7 @@ def getClipLen(file_path):
 
 	try:
 		fd = wave.open(file_path)
-	except EOFError e:
+	except EOFError, e:
 		print 'Could not open %s for analysis' % file_path
 		raise e
 	total_time = fd.getnframes()*fd.getsampwidth() / float(fd.getnchannels() * fd.getframerate())
