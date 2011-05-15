@@ -10,7 +10,11 @@ def getClipLen(file_path):
 	hist_n_intervals = 100
 	threshhold = .4
 
-	fd = wave.open(file_path)
+	try:
+		fd = wave.open(file_path)
+	except EOFError e:
+		print 'Could not open %s for analysis' % file_path
+		raise e
 	total_time = fd.getnframes()*fd.getsampwidth() / float(fd.getnchannels() * fd.getframerate())
 
 	chunk_sz = fd.getnchannels() * fd.getsampwidth() * chunk_len
