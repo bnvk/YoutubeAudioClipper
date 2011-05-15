@@ -37,9 +37,11 @@ if __name__=='__main__':
 	processed = []
 	unprocessed_list = os.listdir('UnprocessedAudio')
 	for clip_path in unprocessed_list:
+		if clip_path[0] == '.':
+			continue
 		try:
 			v = clip.getClipLen('UnprocessedAudio/' + clip_path)
-		except Error, e:
+		except Exception, e:
 			print 'Skipping bad clip'
 			continue
 		v['clip_id'] = clip_path.split('.')[0]
