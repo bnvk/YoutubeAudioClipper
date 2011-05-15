@@ -20,17 +20,19 @@ def dump_audio(clip_path, dest_path):
 	return True
 
 if __name__=='__main__':
-	load_unprocessed.loadUnprocessed()
+	#load_unprocessed.loadUnprocessed()
 	
 	# Unprocessed Videos
 	unprocessed_list = os.listdir(load_unprocessed.unprocessed_dir)
 	for clip_path in unprocessed_list:
-		extension = clip_path.split('.')[0]
+		extension = clip_path.split('.')[1]
+		orig_file = clip_path.split('.')[0]
 		# Check that extension is valid
 		if not extension in settings.valid_video_extensions:
+			print 'Invalid extension on file', clip_path
 			continue
 		# Dump audio and move audiodump.wav to Unprocessed Audio
-		dst_path = 'UnprocessedAudio/' + extension + '.wav'
+		dst_path = 'UnprocessedAudio/' + orig_file + '.wav'
 		if dump_audio(load_unprocessed.unprocessed_dir + '/' + clip_path, dst_path):
 			subprocess.check_call(['mv', load_unprocessed.unprocessed_dir + '/' + clip_path, load_unprocessed.processed_dir + '/' + clip_path])
 
