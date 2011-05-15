@@ -6,6 +6,7 @@ import urllib
 import urllib2
 
 import clip
+import settings
 
 post_url = 'http://rafachant.reverseproductions.com/api/rafachant/process_audio/id/'
 
@@ -21,9 +22,16 @@ def dump_audio(clip_path, dest_path):
 
 if __name__=='__main__':
 	load_unprocessed.loadUnprocessed()
+	
+	# Unprocessed Videos
 	unprocessed_list = os.listdir(load_unprocessed.unprocessed_dir)
 	for clip_path in unprocessed_list:
-		dst_path = 'UnprocessedAudio/' + clip_path.split('.')[0] + '.wav'
+		extension = clip_path.split('.')[0]
+		# Check that extension is valid
+		if not extension in settings.valid_video_extensions:
+			continue
+		# Dump audio and move audiodump.wav to Unprocessed Audio
+		dst_path = 'UnprocessedAudio/' + extension + '.wav'
 		if dump_audio(load_unprocessed.unprocessed_dir + '/' + clip_path, dst_path):
 			subprocess.check_call(['mv', load_unprocessed.unprocessed_dir + '/' + clip_path, load_unprocessed.processed_dir + '/' + clip_path])
 
@@ -36,6 +44,7 @@ if __name__=='__main__':
 
 	for clip_data in processed:
 		print clip_data
+		continue
 		post_data = {}
 		post_data['audio_process_data'] = json.dumps(clip_data)
 		post_data['the_magic_word'] = 'I luvs my #s'
